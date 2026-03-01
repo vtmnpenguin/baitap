@@ -1,0 +1,146 @@
+package com.mycompany.ngaythangnam;
+import java.util.Scanner;
+
+
+public class NgayThangNam
+{
+      private int ngay, thang, nam;
+      
+      // Số ngày trong tháng
+      public int SoNgayTrongThang(int thang, int nam)
+      {
+          switch(thang)
+          {
+              case 1: case 3: case 5: case 7: case 8: case 10: case 12:
+                  return 31;
+              case 4: case 6: case 9: case 11:
+                  return 30;
+              case 2:
+                  if( (nam % 400 == 0) || (nam %4 ==0 && nam %100 != 0))
+                      return 29;
+                  else
+                      return 28;
+                  
+              default:
+                  return 0;
+          }
+      }
+      
+      // Kiểm tra năm nhuận
+      public boolean NamNhuan()
+      {
+        if( (nam % 400 == 0) || (nam %4 ==0 && nam %100 != 0))
+           return true;
+        return false;
+      }
+      
+      public void Nhap()
+      {
+          Scanner sc = new Scanner(System.in);
+          
+          while (true)
+          {
+             System.out.print("Nhap nam: ");
+               nam = sc.nextInt();
+               if(nam < 1) 
+               {
+                  System.out.println("Nam khong hop le! Nhap lai\n");
+                  continue;
+               }
+               
+              System.out.print("Nhap thang: ");
+              thang = sc.nextInt();
+               if(thang <1 || thang > 12)
+               {
+                  System.out.println("Thang khong hop le!Nhap lai\n");
+                  continue;
+               }
+                 
+              System.out.print("Nhap ngay: ");
+              ngay = sc.nextInt();
+               if(ngay < 1 || ngay > SoNgayTrongThang(thang, nam))
+               {
+                   System.out.println("Ngay khong hop le!Nhap lai\n");
+                   continue;
+               }
+              break;
+          }
+      }
+      
+      public void Xuat()
+      {
+       System.out.println("Ngay vua nhap la: " + ngay + "/" +thang +"/"+ nam);
+       System.out.println("Thu: " + TenThu());
+       System.out.println("La nam nhuan: " + NamNhuan());
+       System.out.println("Tong so ngay tu dau nam: " +TongNgay());
+       System.out.println("So Thu Sau ngay 13 trong nam: " + CoBaoNhieuNgayThu());
+      }
+      
+      // Tổng số ngày từ đầu năm
+          public int TongNgay()
+          {
+             int sum = 0;
+             for (int i = 1; i < thang; i++)
+             {
+                 sum += SoNgayTrongThang(i, nam);   
+             }
+             sum += ngay;
+             return sum;
+          }
+          
+          // Cho biết thứ trong tuần
+        public int Thu(int ngay, int thang, int nam)
+        {
+            int t = thang;
+            int n = nam;
+
+             if (t < 3)
+            {
+                t += 12;
+                n--;
+            }
+
+            int k = n % 100;
+            int j = n / 100;
+
+            int h = (ngay + (13 * (t + 1)) / 5 + k + k / 4 + j / 4 + 5 * j) % 7;
+            return h; 
+        }
+        
+        public String TenThu() 
+    {
+            String[] thu = {
+            "Thu Bay",
+            "Chu Nhat",
+            "Thu Hai",
+            "Thu Ba",
+            "Thu Tu",
+            "Thu Nam",
+            "Thu Sau"
+            };
+        return thu[Thu(ngay, thang, nam)];
+    }
+
+        
+        public int CoBaoNhieuNgayThu()
+        {
+            int count = 0;
+            for(int i = 1; i<=12; i++)
+            {
+              if(Thu(13, i, nam) == 6)
+                  count++;
+            }
+            return count;
+            
+        }
+      
+      public static void main (String[] args)
+      {
+         NgayThangNam d = new NgayThangNam();
+         d.Nhap();
+         d.Xuat();
+      }
+      
+          
+          
+}
